@@ -1,0 +1,25 @@
+
+
+{% extends "base.html"%}
+{% block content%}
+{% load staticfiles%}
+ <div class="container">
+
+    <div class="row">
+
+      <div class="col-lg-6">
+    <form method="POST"> {% csrf_token %}
+     <table>
+        {{ form.as_table }}
+
+     </table>
+
+
+
+     <input type="submit" value="Save"/>
+ </form>
+</div>
+    </div>
+ </div>
+
+{%endblock %}
