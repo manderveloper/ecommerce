@@ -1,3 +1,3 @@
 # ecommerce
-This is my first ever Django app. I have incorporated a bootstrap template for the front end.
-Work on the backend is still ongoing. Project is at its initial stage.
+OVERVIEW
+This is an E-commerce web application made using the Django web framework. 
