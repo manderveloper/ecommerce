@@ -1,25 +1,65 @@
-
-
-{% extends "base.html"%}
+{%extends 'base.html'%}
 {% block content%}
+{% load widget_tweaks %}
 {% load staticfiles%}
  <div class="container">
-
     <div class="row">
+      <div class="col-lg-6 offset-md-3">
+        <div class="jumbotron" style="alignment:center">
+          <form id="aj-form" method="post" data-url="{{ request.build_absolute_uri|safe }}"%}>
+            {% csrf_token %}
+                {% for hidden_field in form.hidden_fields %}
+                  {{ hidden_field }}
+                {% endfor %}
 
-      <div class="col-lg-6">
-    <form method="POST"> {% csrf_token %}
-     <table>
-        {{ form.as_table }}
-
-     </table>
-
-
-
-     <input type="submit" value="Save"/>
- </form>
-</div>
+                {% for field in form.visible_fields %}
+                  <div class="form-group">
+                  {{ field.label_tag }}
+                {% render_field field class="form-control" %}
+                {% if field.help_text %}
+                  <small class="form-text text-muted">{{ field.help_text }}</small>
+                {% endif %}
+                  </div>
+                {% endfor %}
+              <button type="submit" class="btn btn-primary" id="submit">Sign up</button>
+          </form>
+        </div>
+      </div>
     </div>
  </div>
+{% endblock %}
 
-{%endblock %}
+
+{% block javascript %}
+<script src="{% static 'vendor/jquery/jquery-3.4.1.min.js' %}"></script>
+
+<script>
+$(document).ready(function(){
+    var $myForm = $('.aj-form')
+    $myForm.submit(function(event){
+        event.preventDefault();
+        var $formData = $(this).serialize()
+        var $thisURL = $myForm.attr('data-url') || window.location.href
+        $.ajax({
+            method: "post",
+            url : $thisURL,
+            data : $formData,
+            success: $handleFormSuccess,
+            failure: $handleFormFailure,
+        })
+        function handleFormSuccess(data, textStatus, jqXHR){
+        console.log(data)
+        console.log(textStatus)
+        console.log(jqXHR)
+        $myForm.reset();
+        }
+
+        function handleFormError(jqXHR, textStatus, errorThrown){
+            console.log(jqXHR)
+            console.log(textStatus)
+            console.log(errorThrown)
+        }
+        })
+})
+</script>
+{% endblock %}

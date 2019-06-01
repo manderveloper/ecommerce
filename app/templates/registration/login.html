@@ -1,0 +1,31 @@
+{%extends 'base.html'%}
+{% load widget_tweaks %}
+{% block content%}
+{% load staticfiles%}
+<div class="container">
+<div class="row">
+<div class="col-lg-6 offset-md-3">
+<form method="post">{% csrf_token %}
+<div class="jumbotron" style="alignment:center">
+{% for hidden_field in form.hidden_fields %}
+{{ hidden_field }}
+{% endfor %}
+
+{% for field in form.visible_fields %}
+<div class="form-group">
+{{ field.label_tag }}
+{% render_field field class="form-control" %}
+{% if field.help_text %}
+<small class="form-text text-muted">{{ field.help_text }}</small>
+{% endif %}
+</div>
+{% endfor %}
+<input class="btn btn-primary" id="submit" type="submit"/>
+</div>
+</form>
+
+
+</div>
+</div>
+</div>
+{% endblock %}

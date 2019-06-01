@@ -1,7 +1,6 @@
 {% load staticfiles %}
 
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html lang="en">
 
 <head>
 
@@ -12,11 +11,18 @@
 
   <title>Gramarket Online Shop</title>
 
+{% if user.is_authenticated %}
+  <div class="row"><small class="text-muted">Hi {{ user.username }}!||</small><a class="btn btn-primary" href="{% url 'logout' %}">Log Out</a></div>
+{% else %}
+  <small class="text-muted">You are not logged in</small>
+    <button type="button" class="btn btn-primary"><a href="{% url 'login'%}">Log in</a></button>
+  {% endif %}
   <!-- Bootstrap core CSS -->
   <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 
   <!-- Custom styles for this template -->
   <link href="{% static 'css/shop-homepage.css' %}" rel="stylesheet">
+  <link href="{% static 'css/one-page-wonder.min.css' %}" rel="stylesheet">
 
 </head>
 
@@ -24,7 +30,44 @@
 
 {%include 'navbar.html'%}
 
-{% block content%}{% endblock %}
+{% block content%}
+
+{% endblock %}
+{% block javascript %}
+
+
+
+<script src="{% static 'vendor/jquery/jquery-3.4.1.min.js' %}"></script>
+{% endblock javascript %}
+
+<script type="text/javascript">
+         function getCookie(name){
+            var cookieValue = null;
+            if (document.cookie && document.cookie !=='') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    if (cookie.substring(0, name.length + 1)===(name+'=')) {
+                        cookieValue = decodeURIComponent(cookies.substring(name.length+1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+         }
+    var csrf_token = getCookie('csrf_token');
+
+    function csrfSafeMethod(method){
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings){
+            if (!csrfSafeMethod(settings.type)&& !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+</script>
 
 </body>
 {% include 'footer.html'%}
